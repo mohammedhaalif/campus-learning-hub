@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Navigate, Route, Routes, useNavigate, useLocation } from 'react-router-dom'
+import { Link, Navigate, NavLink, Route, Routes, useNavigate, useLocation } from 'react-router-dom'
 import {
   BookOpen, GraduationCap, LayoutDashboard, LogOut, MessageCircle, Plus,
   Search, ShieldCheck, Sparkles, UserRound, X, FileText, Video, ExternalLink,
@@ -266,9 +266,9 @@ function DashboardFrame({ role, profile, signOut, children, mobileOpen, setMobil
     <aside className={`sidebar ${mobileOpen ? 'sidebar-open' : ''}`}>
       <div className="sidebar-brand"><Brand/></div>
       <div className="sidebar-section-label">WORKSPACE</div>
-      <nav className="sidebar-nav">{links.map(item => <a key={item.to} href={item.to} onClick={() => setMobileOpen(false)} className={`nav-link ${activePath === item.to || (item.to !== '/student' && activePath.startsWith(item.to)) ? 'selected' : ''}`}><item.icon size={18}/><span>{item.label}</span>{item.label === 'Campus AI' && <span className="new-pill">AI</span>}</a>)}</nav>
+      <nav className="sidebar-nav">{links.map(item => <NavLink key={item.to} to={item.to} onClick={() => setMobileOpen(false)} className={`nav-link ${activePath === item.to || (item.to !== '/student' && activePath.startsWith(item.to)) ? 'selected' : ''}`}><item.icon size={18}/><span>{item.label}</span>{item.label === 'Campus AI' && <span className="new-pill">AI</span>}</NavLink>)}</nav>
       <div className="sidebar-spacer"/>
-      <div className="sidebar-help"><div className="help-orb"><Sparkles size={17}/></div><b>{isTeacher ? 'Keep learning moving' : 'Curiosity looks good on you.'}</b><p>{isTeacher ? 'Share a resource with your students today.' : 'Ask a question. Explore a new idea.'}</p>{!isTeacher && <a href="/student/ai">Talk to Campus AI <ArrowRight size={14}/></a>}</div>
+      <div className="sidebar-help"><div className="help-orb"><Sparkles size={17}/></div><b>{isTeacher ? 'Keep learning moving' : 'Curiosity looks good on you.'}</b><p>{isTeacher ? 'Share a resource with your students today.' : 'Ask a question. Explore a new idea.'}</p>{!isTeacher && <Link to="/student/ai">Talk to Campus AI <ArrowRight size={14}/></Link>}</div>
       <button className="sidebar-user" onClick={signOut}><div className="avatar">{(profile?.name || (isTeacher ? 'Teacher' : 'Student')).slice(0,1).toUpperCase()}</div><div className="user-meta"><b>{profile?.name || (isTeacher ? 'Teacher Admin' : 'Student')}</b><small>{isTeacher ? 'Teacher / Admin' : 'Student account'}</small></div><LogOut size={16}/></button>
     </aside>
     <main className="dashboard-main">
@@ -405,11 +405,11 @@ function StudentDashboard({ profile, demoMode, showNotice }) {
   return <div className="page-enter">
     <PageHeading eyebrow="YOUR LEARNING SPACE" title={`Welcome back, ${firstName}.`} subtitle="Here’s what’s ready for you in your classroom."><div className="profile-chip"><div className="avatar">{firstName.slice(0,1).toUpperCase()}</div><div><b>{profile?.name || 'Student'}</b><small>{profile?.school || 'Your school'}</small></div></div></PageHeading>
     {demoMode && <div className="demo-banner"><AlertCircle size={18}/><span><b>Preview mode</b> — connect Supabase to load your saved class materials.</span></div>}
-    <section className="welcome-banner"><div className="welcome-copy"><div className="eyebrow light">YOUR CLASSROOM</div><h2>Small steps make<br/>big discoveries.</h2><p>Explore your materials, build confidence, and keep asking questions.</p><a href="/student/ai">Ask Campus AI <ArrowRight size={16}/></a></div><div className="welcome-art"><div className="art-ring ring-one"/><div className="art-ring ring-two"/><div className="art-book"><BookOpen size={62}/></div><div className="art-spark spark-one">✦</div><div className="art-spark spark-two">✧</div></div><div className="banner-class"><small>YOUR CLASS</small><b>{classLabel(profile?.class || '8')}</b></div></section>
+    <section className="welcome-banner"><div className="welcome-copy"><div className="eyebrow light">YOUR CLASSROOM</div><h2>Small steps make<br/>big discoveries.</h2><p>Explore your materials, build confidence, and keep asking questions.</p><Link to="/student/ai">Ask Campus AI <ArrowRight size={16}/></Link></div><div className="welcome-art"><div className="art-ring ring-one"/><div className="art-ring ring-two"/><div className="art-book"><BookOpen size={62}/></div><div className="art-spark spark-one">✦</div><div className="art-spark spark-two">✧</div></div><div className="banner-class"><small>YOUR CLASS</small><b>{classLabel(profile?.class || '8')}</b></div></section>
     <div className="section-title-row"><div><h2>Study materials</h2><p>Resources picked for your class.</p></div><div className="search-box"><Search size={16}/><input value={search} onChange={e => setSearch(e.target.value)} placeholder="Find a resource…"/></div></div>
     {loading ? <div className="empty-state"><LoaderCircle className="spin" size={24}/> Loading your classroom…</div> : filtered.length === 0 ? <div className="panel empty-state"><BookOpen size={30}/><b>No materials yet</b><span>Your teacher hasn’t added resources for this class yet. Check back soon.</span></div> :
     <div className="student-material-grid">{filtered.map(m => <MaterialCard key={m.id} material={m}/>)}</div>}
-    <section className="profile-summary panel"><div className="profile-summary-icon"><UserRound size={22}/></div><div className="profile-summary-copy"><b>Your student profile</b><p>{profile?.name} · {profile?.school} · {classLabel(profile?.class)}</p></div><a href="/student/profile">View profile <ArrowRight size={15}/></a></section>
+    <section className="profile-summary panel"><div className="profile-summary-icon"><UserRound size={22}/></div><div className="profile-summary-copy"><b>Your student profile</b><p>{profile?.name} · {profile?.school} · {classLabel(profile?.class)}</p></div><Link to="/student/profile">View profile <ArrowRight size={15}/></Link></section>
   </div>
 }
 
